@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cybersecurity Awareness Game</title>
+  <style>
+    /* NEW STYLES FOR HOME PAGE */
+    #user-info {
+      background: linear-gradient(135deg, #ffab91, #ff7043);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      max-width: 600px;
+      margin: 0 auto;
+      animation: fadeIn 1s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .feature-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin: 25px 0;
+    }
+    
+    .feature {
+      background: rgba(255,255,255,0.8);
+      padding: 15px;
+      border-radius: 15px;
+      width: 120px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: all 0.3s;
+    }
+    
+    .feature:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+    
+    .feature-icon {
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+    
+    .input-group {
+      margin: 15px 0;
+      text-align: left;
+    }
+    
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #5e35b1;
+    }
+    
+    .input-group input, .input-group select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 2px solid #5e35b1;
+      font-size: 16px;
+    }
+    
+    .start-btn {
+      background: linear-gradient(to right, #4CAF50, #8BC34A);
+      color: white;
+      font-weight: bold;
+      font-size: 20px;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: all 0.3s;
+      margin-top: 20px;
+    }
+    
+    .start-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+    }
+    
+    .cyber-mascot {
+      width: 150px;
+      height: 150px;
+      margin: 0 auto 20px;
+      background: url('https://cdn-icons-png.flaticon.com/512/2936/2936886.png') center/contain no-repeat;
+      animation: bounce 2s infinite alternate;
+    }
+    
+    @keyframes bounce {
+      from { transform: translateY(0); }
+      to { transform: translateY(-15px); }
+    }
+    
+    .welcome-text {
+      font-size: 22px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      color: #1a237e;
+    }
+    
+    /* EXISTING STYLES */
+    #muteToggle {
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    .progress-container {
+      width: 100%;
+      background: #f3f3f3;
+      border-radius: 10px;
+      margin: 15px 0;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 20px;
+      background: linear-gradient(90deg, #4CAF50, #8BC34A);
+      width: 0%;
+      transition: width 0.6s ease;
+    }
+    
+    .leaderboard {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 20px auto;
+      max-width: 500px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .leaderboard h3 {
+      margin-top: 0;
+      color: #3F51B5;
+    }
+    .leaderboard ol {
+      text-align: left;
+      padding-left: 25px;
+    }
+    .leaderboard li {
+      margin: 8px 0;
+      font-size: 16px;
+    }
+    
+    .review-container {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 20px auto;
+      max-width: 600px;
+      text-align: left;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .review-item {
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #eee;
+    }
+    .review-item:last-child {
+      border-bottom: none;
+    }
+    .review-question {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .user-answer.correct {
+      color: #4CAF50;
+    }
+    .user-answer.incorrect {
+      color: #F44336;
+    }
+    .correct-answer {
+      color: #4CAF50;
+      font-weight: bold;
+    }
+    .review-tip {
+      font-style: italic;
+      color: #555;
+      margin-top: 5px;
+    }
+    .toggle-review {
+      background: #2196F3;
+      color: white;
+      margin: 10px 0;
+    }
+    
+    body {
+      font-family: 'Comic Sans MS', sans-serif;
+      background: #4fc3f7;
+      text-align: center;
+      padding: 20px;
+      transition: background 0.5s;
+    }
+    .quiz-box {
+      background: #ffab91;
+      border-radius: 25px;
+      padding: 30px;
+      max-width: 700px;
+      margin: auto;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .option {
+      background: white;
+      margin: 10px;
+      padding: 15px;
+      border-radius: 15px;
+      font-size: 20px;
+      cursor: pointer;
+      border: 1px solid #ccc;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .option:hover {
+      background: #fff176;
+      transform: scale(1.02);
+    }
+    button {
+      padding: 15px 25px;
+      font-size: 18px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+    }
+    button:hover {
+      transform: scale(1.05);
+    }
+    .correct { color: green; font-weight: bold; }
+    .incorrect { color: red; font-weight: bold; }
+    .feedback { font-size: 20px; margin-top: 10px; }
+    .question { font-size: 28px; font-weight: bold; color: #1e88e5; }
+    .header { font-size: 36px; color: #e91e63; margin-bottom: 10px; }
+    .subheader { font-size: 18px; color: #5e35b1; margin-bottom: 20px; }
+    .next-btn { background: #4caf50; color: white; }
+    .next-btn:hover { background: #388e3c; }
+    .replay-btn { background: #ff5722; color: white; }
+    .replay-btn:hover { background: #e64a19; }
+    #status {
+      font-size: 18px;
+      margin-top: 10px;
+      color: #333;
+    }
+    #user-info {
+      transition: opacity 0.5s;
+    }
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: #f00;
+      border-radius: 50%;
+      animation: fall 5s linear infinite;
+    }
+    @keyframes fall {
+      to { transform: translateY(100vh); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Audio elements for sound effects -->
+  <audio id="correctSound" preload="auto">
+    <source src="https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="wrongSound" preload="auto">
+    <source src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="gameOverSound" preload="auto">
+    <source src="https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3" type="audio/mpeg">
+  </audio>
+  
+  <div class="quiz-box">
+    <h1 class="header">🛡 Cybersecurity Awareness Game</h1>
+    <p class="subheader">This game won't take more than 5 minutes. Please focus and protect your data!</p>
+    
+    <div id="user-info">
+      <div class="cyber-mascot"></div>
+      <p class="welcome-text">Welcome to the Cybersecurity Challenge! Get ready to test your knowledge and learn how to stay safe online in this fun, interactive game.</p>
+      
+      <div class="feature-list">
+        <div class="feature">
+          <div class="feature-icon">🧠</div>
+          <div>15 Questions</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🏆</div>
+          <div>Earn Points</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">💡</div>
+          <div>Learn Tips</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">⏱</div>
+          <div>Timed Game</div>
+        </div>
+      </div>
+      
+      <div class="input-group">
+        <label for="name">Your Name:</label>
+        <input type="text" id="name" placeholder="Enter your name">
+      </div>
+      
+      <div class="input-group">
+        <label for="age">Your Age (6-18):</label>
+        <input type="number" id="age" placeholder="Enter your age" min="6" max="18">
+      </div>
+      
+      <div class="input-group">
+        <label for="gender">Gender:</label>
+        <select id="gender">
+          <option value="">Select gender</option>
+          <option value="female">Female 👧</option>
+          <option value="male">Male 👦</option>
+        </select>
+      </div>
+      
+      <div style="margin:20px 0; text-align:center;">
+        <label>
+          <input type="checkbox" id="muteToggle"> Mute sounds
+        </label>
+      </div>
+      
+      <button onclick="startGame()" class="start-btn">Start Cyber Adventure! 🚀</button>
+    </div>
+    
+    <div id="status"></div>
+    <div id="game" style="margin-top: 20px;"></div>
+  </div>
+
+  <script>
+    const questions_7_12 = [
+      ["What is a password?", ["Your name", "A secret no one knows", "Your phone number", "Your birthday"], 1, "A password is a secret that only you should know."],
+      ["Should you share your password with friends?", ["Yes", "No", "Sometimes", "If they ask nicely"], 1, "Passwords are private, keep them safe!"],
+      ["What should you do if a stranger messages you?", ["Reply", "Tell an adult", "Send your address", "Say hi"], 1, "Always tell a trusted adult if a stranger contacts you!"],
+      ["Which one is a strong password?", ["1234", "password", "B@byD0g!9", "abc"], 2, "Strong passwords mix numbers, letters and symbols."],
+      ["What is a computer virus?", ["A game", "A sickness", "A harmful program", "Something fun"], 2, "A virus can harm your computer."],
+      ["What should you do before clicking a link?", ["Click fast", "Ignore it", "Check if it's safe", "Tell no one"], 2, "Always check links before clicking!"],
+      ["Which website is safer?", ["http://", "https://", "hackme.com", "freegames.net"], 1, "Look for 'https://' in websites for security."],
+      ["Should you use the same password everywhere?", ["Yes", "No", "Only for games", "If it's long"], 1, "Use different passwords for each site."],
+      ["What should you do if a pop-up appears?", ["Click it", "Ignore it", "Close or ask an adult", "Share it"], 2, "Pop-ups can be dangerous."],
+      ["Is it okay to meet online strangers?", ["Yes", "Only with friends", "No", "If they're nice"], 2, "Never meet strangers from online."],
+      ["Which is OK to share online?", ["Home address", "Favorite color", "Phone number", "School name"], 1, "It's safe to share your favorite color."],
+      ["Why should you not post your location?", ["No reason", "It's cool", "It can be dangerous", "Everyone does"], 2, "It can help people find you."],
+      ["What is 2FA?", ["Two friends online", "Extra login step", "New password", "Computer game"], 1, "2FA adds extra protection to your accounts."],
+      ["Should you ask parents before downloading apps?", ["Yes", "No", "Only games", "Never"], 0, "Always ask your parents before downloading."],
+      ["Can games have viruses?", ["No", "Sometimes", "Never", "Always safe"], 1, "Games can sometimes have viruses. Be careful!"]
+    ];
+
+    const questions_13_17 = [
+      ["What is phishing?", ["A fishing game", "Fake emails trying to steal info", "A type of virus", "A security tool"], 1, "Phishing is when criminals try to trick you into giving personal info."],
+      ["Why is encryption important?", ["Makes files smaller", "Protects private information", "Speeds up your computer", "Changes file names"], 1, "Encryption scrambles data so only authorized people can read it."],
+      ["What makes a password strong?", ["Using your pet's name", "Combining letters, numbers & symbols", "Making it short", "Using common words"], 1, "Strong passwords are long and mix different character types."],
+      ["What does 'HTTPS' in a URL mean?", ["The site is old", "The connection is secure", "The site is fast", "It's a government site"], 1, "HTTPS means your connection to the website is encrypted."],
+      ["What should you do if you get a suspicious email?", ["Open any attachments", "Reply to check who sent it", "Delete it or mark as spam", "Forward to friends"], 2, "Never interact with suspicious emails - delete or report them."],
+      ["What is a VPN good for?", ["Making downloads faster", "Securing public Wi-Fi connections", "Getting free games", "Changing your computer's look"], 1, "VPNs encrypt your internet traffic, especially important on public Wi-Fi."],
+      ["What is two-factor authentication (2FA)?", ["Having two passwords", "An extra security step when logging in", "Using two devices at once", "A type of virus scan"], 1, "2FA adds another verification step beyond just a password."],
+      ["What is scareware?", ["A type of antivirus", "Fake warnings that trick you into downloading malware", "Software that makes computers faster", "A security certification"], 1, "Scareware uses fake alerts to scare you into installing malware or paying for useless software."],
+      ["How can you tell if your device is part of a botnet?", ["It runs slower than usual", "Unusual network activity when idle", "Both of these signs", "Your screen flashes colors"], 2, "Slow performance + strange network activity may mean your device is infected and part of a botnet."],
+      ["How can you protect against botnets?", ["Use the same password everywhere", "Keep software updated & use antivirus", "Click all email links to check them", "Disable all security features"], 1, "Regular updates and antivirus help prevent botnet infections that exploit vulnerabilities."],
+      ["What's the safest way to handle 'Your computer is infected!' pop-ups?", ["Click to scan immediately", "Pay to remove the threats", "Close without interacting", "Call the provided number"], 2, "Legitimate warnings never appear this way - these are scareware tactics to install malware."],
+      ["What is ransomware?", ["A payment app", "Malware that locks your files for money", "A keyboard accessory", "A type of password"], 1, "Ransomware encrypts your files and demands payment to unlock them."],
+      ["Why shouldn't you use public Wi-Fi without protection?", ["It's always slow", "Others might see what you're doing", "It uses more battery", "You can't watch videos"], 1, "Public Wi-Fi can let hackers intercept your data if not protected."],
+      ["What is a password manager?", ["Someone who remembers passwords for you", "A secure app that stores passwords", "A type of hacker", "A way to share passwords"], 1, "Password managers securely store and generate strong passwords for you."],
+      ["What is a digital footprint?", ["Your shoe size online", "Everything you do on the internet", "A type of password", "How fast you type"], 1, "Your digital footprint is all your online activity that leaves traces."]
+    ];
+
+    let quiz = [], current = 0, score = 0, timer = 0, timerInterval;
+    let userAnswers = []; // To store all user answers for review
+
+    function startGame() {
+      const age = parseInt(document.getElementById("age").value);
+      const name = document.getElementById("name").value.trim();
+      const gender = document.getElementById("gender").value;
+      if (!name || isNaN(age) || age < 6 || age > 18 || !gender) {
+        alert("Please enter your name, valid age (6–18), and select gender.");
+        return;
+      }
+      quiz = age <= 12 ? questions_7_12 : questions_13_17;
+      current = 0;
+      score = 0;
+      timer = 0;
+      userAnswers = []; // Reset answers for new game
+      document.getElementById("user-info").style.opacity = "0";
+      setTimeout(() => {
+        document.getElementById("user-info").style.display = "none";
+      }, 500);
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timer++;
+        updateStatus();
+      }, 1000);
+      showQuestion();
+    }
+
+    function updateStatus() {
+      const minutes = Math.floor(timer / 60);
+      const seconds = timer % 60;
+      document.getElementById("status").innerHTML = `⏱ Time: ${minutes}m ${seconds}s | 🎯 Score: ${score}`;
+    }
+
+    function showQuestion() {
+      updateStatus();
+      const q = quiz[current];
+      let progressPercent = ((current)/quiz.length)*100;
+      let html = `
+        <div class="progress-container">
+          <div class="progress-bar" style="width: ${progressPercent}%"></div>
+        </div>
+        <h3 class="question">Question ${current + 1} of ${quiz.length}</h3>
+        <p style="font-size: 24px;">${q[0]}</p>
+      `;
+      q[1].forEach((opt, i) => {
+        html += `<div class="option" onclick="checkAnswer(${i})">${opt}</div>`;
+      });
+      document.getElementById("game").innerHTML = html;
+    }
+
+    function playSound(soundId) {
+      const sound = document.getElementById(soundId);
+      sound.currentTime = 0; // Rewind to start in case it's playing
+      sound.play().catch(e => console.log("Sound playback prevented:", e));
+    }
+
+    function checkAnswer(selected) {
+      const q = quiz[current];
+      const isCorrect = selected === q[2];
+      const muteToggle = document.getElementById('muteToggle').checked;
+
+      // Store the answer for review
+      userAnswers.push({
+        question: q[0],
+        userChoice: q[1][selected],
+        correctAnswer: q[1][q[2]],
+        isCorrect: isCorrect,
+        tip: q[3]
+      });
+
+      if (!muteToggle) {
+        playSound(isCorrect ? 'correctSound' : 'wrongSound');
+      }
+
+      if (isCorrect) {
+        score++;
+        document.body.style.background = "#81c784";
+        setTimeout(() => {
+          document.body.style.background = "#4fc3f7";
+        }, 300);
+      } else {
+        document.body.style.background = "#e57373";
+        setTimeout(() => {
+          document.body.style.background = "#4fc3f7";
+        }, 300);
+      }
+
+      updateStatus();
+      const feedback = `
+        <div class="feedback ${isCorrect ? 'correct' : 'incorrect'}">
+          ${isCorrect ? '✅ Correct!' : '❌ Incorrect!'}<br>
+          ${!isCorrect ? "Correct Answer: " + q[1][q[2]] + "<br>" : ""}
+          <span style="color: #333;">💡 Tip: ${q[3]}</span><br><br>
+          <button class="next-btn" onclick="nextQuestion()">${current === quiz.length - 1 ? "Finish" : "Next"}</button>
+        </div>`;
+      document.getElementById("game").innerHTML = feedback;
+    }
+
+    function nextQuestion() {
+      current++;
+      if (current >= quiz.length) {
+        showResult();
+      } else {
+        showQuestion();
+      }
+    }
+
+    function generateCertificate() {
+      const playerName = document.getElementById("name").value.trim() || "Cyber Champion";
+      const playerScore = `${score}/${quiz.length}`;
+      const completionDate = new Date().toLocaleDateString();
+      const performanceLevel = score >= 13 ? "Excellent" : score >= 10 ? "Good" : "Passing";
+      
+      const certWindow = window.open('', '_blank');
+      certWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Cybersecurity Certificate</title>
+          <style>
+            @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+            body {
+              font-family: 'Montserrat', sans-serif;
+              background: #f5f5f5;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              height: 100vh;
+              margin: 0;
+            }
+            .certificate {
+              width: 800px;
+              height: 600px;
+              background: white;
+              border: 15px solid #4CAF50;
+              padding: 40px;
+              text-align: center;
+              box-shadow: 0 0 20px rgba(0,0,0,0.2);
+              position: relative;
+              background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+            }
+            .watermark {
+              position: absolute;
+              opacity: 0.1;
+              font-size: 120px;
+              transform: rotate(-45deg);
+              top: 30%;
+              left: 10%;
+              color: #4CAF50;
+              font-weight: bold;
+            }
+            h1 { 
+              color: #4CAF50; 
+              font-size: 36px;
+              margin-bottom: 10px;
+              text-transform: uppercase;
+              letter-spacing: 2px;
+            }
+            h2 {
+              color: #333;
+              font-size: 24px;
+              margin-top: 0;
+              font-weight: normal;
+            }
+            .recipient {
+              font-size: 32px;
+              margin: 30px 0;
+              color: #2196F3;
+              font-weight: bold;
+              text-decoration: underline;
+            }
+            .details {
+              margin: 20px 0;
+              font-size: 18px;
+              line-height: 1.6;
+            }
+            .seal {
+              margin-top: 30px;
+            }
+            .print-btn {
+              margin-top: 20px;
+              padding: 10px 20px;
+              background: #4CAF50;
+              color: white;
+              border: none;
+              border-radius: 5px;
+              cursor: pointer;
+              font-size: 16px;
+              transition: all 0.3s;
+            }
+            .print-btn:hover {
+              background: #388E3C;
+            }
+            .signature {
+              margin-top: 40px;
+              display: flex;
+              justify-content: space-around;
+            }
+            .signature-line {
+              border-top: 1px solid #333;
+              width: 200px;
+              display: inline-block;
+              margin-top: 50px;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="certificate">
+            <div class="watermark">CYBER SAFE</div>
+            <h1>Certificate of Achievement</h1>
+            <h2>in Cybersecurity Awareness</h2>
+            
+            <p class="details">This certificate is proudly presented to</p>
+            <div class="recipient">${playerName}</div>
+            
+            <div class="details">
+              For successfully completing the Cybersecurity Awareness Game<br>
+              with a score of <strong>${playerScore}</strong> (${performanceLevel} level)<br>
+              on ${completionDate}
+            </div>
+            
+            <div class="signature">
+              <div>
+                <div class="signature-line"></div>
+                <p>Student Signature</p>
+              </div>
+              <div>
+                <div class="signature-line"></div>
+                <p>Cyber Safety Academy</p>
+              </div>
+            </div>
+            
+            <div class="seal">
+              <button class="print-btn" onclick="window.print()">🖨️ Print Certificate</button>
+            </div>
+          </div>
+        </body>
+        </html>
+      `);
+      certWindow.document.close();
+    }
+
+    function updateLeaderboard() {
+      const playerName = document.getElementById("name").value.trim() || "Anonymous";
+      const playerScore = score;
+      const playerTime = timer;
+      
+      // Get existing leaderboard or create new one
+      let leaderboard = JSON.parse(localStorage.getItem('cyberLeaderboard')) || [];
+      
+      // Add current player's score
+      leaderboard.push({
+        name: playerName,
+        score: playerScore,
+        time: playerTime,
+        date: new Date().toLocaleDateString()
+      });
+      
+      // Sort by score (highest first), then by time (fastest first)
+      leaderboard.sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score;
+        return a.time - b.time;
+      });
+      
+      // Keep only top 5 scores
+      leaderboard = leaderboard.slice(0, 5);
+      
+      // Save back to localStorage
+      localStorage.setItem('cyberLeaderboard', JSON.stringify(leaderboard));
+      
+      return leaderboard;
+    }
+
+    function showReviewAnswers() {
+      let reviewHTML = '<div class="review-container">';
+      reviewHTML += '<h3>📝 Review Your Answers</h3>';
+      
+      userAnswers.forEach((answer, index) => {
+        reviewHTML += `
+          <div class="review-item">
+            <div class="review-question">Q${index + 1}: ${answer.question}</div>
+            <div class="user-answer ${answer.isCorrect ? 'correct' : 'incorrect'}">
+              Your answer: ${answer.userChoice} ${answer.isCorrect ? '✅' : '❌'}
+            </div>
+            ${!answer.isCorrect ? `<div class="correct-answer">Correct answer: ${answer.correctAnswer}</div>` : ''}
+            <div class="review-tip">💡 ${answer.tip}</div>
+          </div>
+        `;
+      });
+      
+      reviewHTML += '</div>';
+      return reviewHTML;
+    }
+
+function showResult() {
+  clearInterval(timerInterval);
+
+  if (!document.getElementById('muteToggle').checked) {
+    playSound('gameOverSound');
+  }
+
+  let message = "";
+  if (score === 15) {
+    message = "Excellent! You are cyber-smart! 🎉";
+    createConfetti();
+  } else if (score >= 10) {
+    message = "Good job, but keep learning more about cybersecurity! 👍";
+  } else {
+    message = "You need to learn more about cybersecurity. Stay safe online! 🛡";
+  }
+
+  const minutes = Math.floor(timer / 60);
+  const seconds = timer % 60;
+
+  const leaderboard = updateLeaderboard();
+
+  let leaderboardHTML = '<div class="leaderboard">';
+  leaderboardHTML += '<h3>🏆 Top Scores</h3><ol>';
+  leaderboard.forEach((entry) => {
+    const entryMinutes = Math.floor(entry.time / 60);
+    const entrySeconds = entry.time % 60;
+    leaderboardHTML += `<li>${entry.name}: ${entry.score}/15 (${entryMinutes}m${entrySeconds}s) - ${entry.date}</li>`;
+  });
+  leaderboardHTML += '</ol></div>';
+
+  const reviewHTML = showReviewAnswers();
+
+  let resultHTML = `
+    <h2>🎉 Game Finished! 🎉</h2>
+    <p><strong>🏆 Score:</strong> ${score} / ${quiz.length}</p>
+    <p><strong>⏰ Total Time:</strong> ${minutes}m ${seconds}s</p>
+    <p style="font-size: 24px; font-weight: bold;">${message}</p>
+
+    <div style="margin: 20px auto; max-width: 700px;">
+      <img src="safety_tips.png" alt="Online Safety Tips" style="width: 100%; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+      <p style="font-size: 16px; color: #333; margin-top: 10px;">💡 Review these tips to stay safe online!</p>
+    </div>
+
+    ${leaderboardHTML}
+
+    <button id="toggleReviewBtn" class="toggle-review" onclick="document.getElementById('reviewContainer').style.display='block'; this.style.display='none'">
+      📝 Review All Answers
+    </button>
+    <div id="reviewContainer" style="display:none;">
+      ${reviewHTML}
+    </div>
+  `;
+
+  if (score >= 10) {
+    resultHTML += `
+      <button onclick="generateCertificate()" style="background:#9C27B0; color:white; margin:10px 5px;">
+        🏅 Get Your Certificate
+      </button>
+    `;
+  }
+
+  resultHTML += `
+    <button class="replay-btn" onclick="location.reload()">🔁 Play Again</button>
+  `;
+
+  document.getElementById("game").innerHTML = resultHTML;
+  document.getElementById("status").innerHTML = '';
+}
+
+
+    function createConfetti() {
+      const colors = ['#f00', '#0f0', '#00f', '#ff0', '#f0f', '#0ff'];
+      for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        document.body.appendChild(confetti);
+        setTimeout(() => {
+          confetti.remove();
+        }, 5000);
+      }
+    }
+  </script>
+</body>
+</html>
